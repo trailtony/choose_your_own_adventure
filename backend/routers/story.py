@@ -7,7 +7,9 @@ from sqlalchemy.orm import Session
 from db.database import get_db, SessionLocal
 from models.story import Story, StoryNode
 from models.job import StoryJob
-from schemas.story import (CompleteStoryResponse, CompleteStoryNodeResponse, CreateStoryRequest)
+from schemas.story import (
+    CompleteStoryResponse, CompleteStoryNodeResponse, CreateStoryRequest
+    )
 from schemas.job import StoryJobResponse
 
 
@@ -24,8 +26,13 @@ def get_session_id(session_id: Optional[str] = Cookie(None)) -> str:
 
 
 @router.post("/create", response_model=StoryJobResponse)
-def create_story(request: CreateStoryRequest, background_tasks: BackgroundTasks, response: Response, session_id: str = Depends(get_session_id), db: Session = Depends(get_db)
-) -> StoryJobResponse:
+def create_story(
+    request: CreateStoryRequest, 
+    background_tasks: BackgroundTasks, 
+    response: Response, 
+    session_id: str = Depends(get_session_id), 
+    db: Session = Depends(get_db)
+):
     response.set_cookie(key="session_id", value=session_id, httponly=True)
 
     job_id = str(uuid.uuid4())
@@ -39,8 +46,12 @@ def create_story(request: CreateStoryRequest, background_tasks: BackgroundTasks,
     db.add(job)
     db.commit()
 
-    # TODO: add background tasks, generate story
-    background_tasks.add_task(generate_story_task, job_id, request.theme, session_id)
+    background_tasks.add_task(
+        generate_story_task,
+        job_id,
+        request.theme,
+        session_id
+        )
 
     return job
 
@@ -56,7 +67,6 @@ def generate_story_task(job_id: str, theme: str, session_id: str):
 
         try:
             job.status = "processing"
-
             db.commit()
 
             story = {} # todo: generate story
@@ -80,6 +90,7 @@ def get_complete_story(story_id: int, db: Session = Depends(get_db)):
     story = db.query(Story).filter(Story.id == story_id).first()
     if not story:
         raise HTTPException(status_code=404, detail="Story not found")
+        
     # todo: parse story
     complete_story = build_complete_story_tree(db, story)
     return complete_story
