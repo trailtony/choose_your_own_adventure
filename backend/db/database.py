@@ -20,4 +20,4 @@ def get_db():
         
         
 def create_tables():
-    pass
+    Base.metadata.create_all(bind=engine)

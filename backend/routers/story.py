@@ -88,9 +88,10 @@ def generate_story_task(job_id: str, theme: str, session_id: str):
 @router.get("/{story_id}/complete", response_model=CompleteStoryResponse)
 def get_complete_story(story_id: int, db: Session = Depends(get_db)):
     story = db.query(Story).filter(Story.id == story_id).first()
+    
     if not story:
         raise HTTPException(status_code=404, detail="Story not found")
-        
+
     # todo: parse story
     complete_story = build_complete_story_tree(db, story)
     return complete_story
