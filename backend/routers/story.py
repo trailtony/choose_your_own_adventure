@@ -69,15 +69,15 @@ def generate_story_task(job_id: str, theme: str, session_id: str):
             job.status = "processing"
             db.commit()
 
-            story = {} # todo: generate story
+            #story = {} # todo: generate story
 
-            job_story_id = 1 # todo: update story id
-            job_status = "completed"
-            job_completed_at = datetime.now()
+            job.story_id = 1 # todo: update story id
+            job.status = "completed"
+            job.completed_at = datetime.now()
             db.commit()
         except Exception as e:
-            job_status = "failed"
-            job_completed_at = datetime.now()
+            job.status = "failed"
+            job.completed_at = datetime.now()
             job.error = str(e)
             db.commit()
     finally:
