@@ -1,8 +1,8 @@
 import { useState, useEffect} from 'react';
-import {useParams, useNavigate} from 'react';
+import {useParams, useNavigate} from "react-router-dom";
 import axios from 'axios';
-import LoadingStatus from './LoadingStatus.jsx';
-import StoryGame from './StoryGame.jsx';
+import LoadingStatus from "./LoadingStatus.jsx";
+import StoryGame from "./StoryGame.jsx";
 
 
 const API_BASE_URL = "/api"
