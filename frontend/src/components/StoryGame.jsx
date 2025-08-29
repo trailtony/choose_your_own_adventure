@@ -8,7 +8,7 @@ function StoryGame({story, onNewStory}) {
     const [isWinningEnding, setIsWinningEnding] = useState(false)
 
     useEffect(() => {
-        if (story && story.root_node.id){
+        if (story && story.root_node){
             const rootNodeId = story.root_node.id
             setCurrentNodeId(rootNodeId)
         }
@@ -49,7 +49,7 @@ function StoryGame({story, onNewStory}) {
         <div className="story-content">
             {currentNode && <div className="story-node">
                 <p>{currentNode.content}</p>
-                {is_ending ?
+                {isEnding ?
                 <div className="story-ending">
                     <h3>{isWinningEnding ? "Congratulations" : "The End"}</h3>
                     {isWinningEnding ? "You reached a winning ending" : "Your adventure has ended."}
