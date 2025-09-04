@@ -15,6 +15,24 @@ function StoryGenerator() {
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
 
+
+    useEffect(() => {
+        let pollInterval;
+
+        if (jobId && jobStatus === "processing"){
+            pollInterval = setInterval(() => {
+                pollJobStatus(jobId)
+            }, 5000)
+        }
+
+        return() => {
+            if (pollInterval){
+                clearInterval(pollInterval)
+            }
+        }
+    }, [jobId, jobStatus])
+
+
     const generateStory = async (theme) => {
         setLoading(true)
         setError(null)
@@ -65,5 +83,13 @@ function StoryGenerator() {
             setError(false)
             setLoading(false)
         }
+    }
+
+    const reset = () => {
+        setJobId(null)
+        setJobStatus(null)
+        setError(null)
+        setTheme("")
+        setLoading(false)
     }
 }
