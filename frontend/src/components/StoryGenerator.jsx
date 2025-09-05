@@ -92,4 +92,18 @@ function StoryGenerator() {
         setTheme("")
         setLoading(false)
     }
+
+
+    return <div className="story-generator">
+        {error && <div className="error-message">
+            <p>{error}</p>
+            <button onClick={reset}>Try Again</button>
+        </div>}
+
+        {!jobId && !error && !loading && <ThemeInput onSubmit={generateStory}/>}
+
+        {loading && <LoadingStatus theme={theme}/>}
+    </div>
 }
+
+export default StoryGenerator
