@@ -6,7 +6,6 @@ import LoadingStatus from "./LoadingStatus.jsx";
 import {API_BASE_URL} from "../util.js";
 
 
-
 function StoryGenerator() {
     const navigate = useNavigate()
     const [theme, setTheme] = useState("")
@@ -15,23 +14,21 @@ function StoryGenerator() {
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
 
-
     useEffect(() => {
         let pollInterval;
 
-        if (jobId && jobStatus === "processing"){
+        if (jobId && jobStatus === "processing") {
             pollInterval = setInterval(() => {
                 pollJobStatus(jobId)
             }, 5000)
         }
 
-        return() => {
-            if (pollInterval){
+        return () => {
+            if (pollInterval) {
                 clearInterval(pollInterval)
             }
         }
     }, [jobId, jobStatus])
-
 
     const generateStory = async (theme) => {
         setLoading(true)
@@ -45,14 +42,11 @@ function StoryGenerator() {
             setJobStatus(status)
 
             pollJobStatus(job_id)
-
         } catch (e) {
             setLoading(false)
             setError(`Failed to generate story: ${e.message}`)
         }
     }
-
-
 
     const pollJobStatus = async (id) => {
         try {
@@ -62,12 +56,12 @@ function StoryGenerator() {
 
             if (status === "completed" && story_id) {
                 fetchStory(story_id)
-            } else if (status == "failed" || jobError) {
+            } else if (status === "failed" || jobError) {
                 setError(jobError || "Failed to generate story")
                 setLoading(false)
             }
-        } catch(e) {
-            if (e.response?.status != 404) {
+        } catch (e) {
+            if (e.response?.status !== 404) {
                 setError(`Failed to check story status: ${e.message}`)
                 setLoading(false)
             }
@@ -80,7 +74,7 @@ function StoryGenerator() {
             setJobStatus("completed")
             navigate(`/story/${id}`)
         } catch (e) {
-            setError(false)
+            setError(`Failed to load story: ${e.message}`)
             setLoading(false)
         }
     }
@@ -93,7 +87,6 @@ function StoryGenerator() {
         setLoading(false)
     }
 
-
     return <div className="story-generator">
         {error && <div className="error-message">
             <p>{error}</p>
@@ -102,7 +95,7 @@ function StoryGenerator() {
 
         {!jobId && !error && !loading && <ThemeInput onSubmit={generateStory}/>}
 
-        {loading && <LoadingStatus theme={theme}/>}
+        {loading && <LoadingStatus theme={theme} />}
     </div>
 }
 
